@@ -36,3 +36,5 @@ Ride substitutions
 Not all rides in Legoland are available in Parkitect, so (wanting to do this without mods) I had to get a bit creative.
 
 - The traffic school, where kids drive vehicles around in a miniature town, became a Go Kart track.
+
+- Atlantis Sea Life became a Haunted House.
