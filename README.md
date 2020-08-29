@@ -23,12 +23,29 @@ Resources
 
 - [SDFE Skråfoto](https://skraafoto.kortforsyningen.dk/oblivisionjsoff/index.aspx?project=Denmark&lon=9.1253156&lat=55.7358396), official aerial photos published by the Danish government, taken from straight overhead and from four oblique angles. This is a fantastic resource because it shows the park much from the same perspective as it looks in Parkitect. The top-down photos are from 2017, but the oblique ones are from 2019 after the remodelling.
 
+- [DHM - Danmarks Højdemodel](https://download.kortforsyningen.dk/content/geodataprodukter?field_korttype_tid_1=653&field_aktualitet_tid=749&field_datastruktur_tid=All&field_scheme_tid=All), a LIDAR height map of Denmark with a resolution of 40 cm. After figuring out the Danish and creating a free account, I downloaded the relevant 10×10 km tile (617_50) of the DHM/Overflade (height including buildings, trees and such) and DHM/Terræn (height of the terrain surface) data sets in GeoTIFF format.
+
 - [LEGO Colors](https://rebrickable.com/colors/) at Rebrickable for the hexadecimal RGB codes of the official LEGO colours. Great for copying and pasting straight into the Parkitect colour picker.
+
+Height map notes
+----------------
+
+- Added base map to QGIS using WMS URL `https://services.kortforsyningen.dk/topo_skaermkort?token=XXX` with the token created [here](https://download.kortforsyningen.dk/content/min-side) after login.
+- Downloaded `DSM_617_50_TIF_UTM32-ETRS89.zip` and `DTM_617_50_TIF_UTM32-ETRS89.zip`.
+- The used CRS is EPSG:25832 (ETRS89 / UTM zone 32N).
+- Each contains 100 tiles of 1×1 km each. The relevant ones are numbered `6176_507` and `6176_508`.
+- These GeoTIFFs were extracted from the ZIP, added in QGIS and merged using the Processing Toolbox: GDAL > Raster miscellaneous > Merge. The outputs are `D[ST]M_merged.tif`.
+- We consider the Nordmarksvej as flat, at 64.0 meters. This becomes a height value of 3.0 in-game (the base height of an empty map). The layers were shifted and scaled into game units using the Raster Calculator using an expression like `("DTM_merged@1" - 64) / 3 + 3`. The outputs are `D[ST]M_merged_scaled.tif`.
+- To save disk space, the result was then clipped to a bounding box. The outputs are `D[ST]M_merged_scaled_clipped.tif`.
+- A color scale was added to threshold the height levels into steps of 0.5.
+- Exporting this to a PNG at 1:1 resolution is tricky! I did it like this: zoom the map to 1:25000, go to File > Export > Export Map to Image, choose the layer as the extents, and then set 1589 dpi (manually calculated). The result is still somehow not _quite_ right but it'll do.
 
 Notes
 -----
 
 - A grid square in Parkitect is 3 meters. Height units are presumably also 3 meters.
+- The base height of an empty map is 3.0.
+- Legotop height is 8 game units.
 
 Ride substitutions
 ------------------
